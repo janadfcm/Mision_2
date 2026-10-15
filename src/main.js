@@ -1,6 +1,7 @@
 // Punto de entrada: escucha los eventos y coordina api → datos → render (cargando, error, vacío, resultados).
 import './style.css'
 import { buscarObras } from './api.js'
+import { leerCache, guardarCache } from './cache.js'
 import { prepararObras, filtrarObras, opcionesDeFiltro, calcularEstadisticas } from './datos.js'
 import {
   pintarCargando,
@@ -24,6 +25,7 @@ const seccionResultados = document.querySelector('#resultados')
 
 // Obras de la última búsqueda, ya preparadas; los filtros trabajan sobre ellas sin volver a pedirlas
 let obrasActuales = []
+let obrasDesdeCache = false
 
 // Si el usuario lanza una búsqueda antes de que termine la anterior, la respuesta
 // vieja puede llegar después que la nueva. Numeramos las búsquedas e ignoramos las antiguas.
@@ -42,8 +44,16 @@ async function buscar(texto) {
   pintarCargando(seccionEstado, tema)
 
   let obras
+  let desdeCache
   try {
-    obras = prepararObras(await buscarObras(tema))
+    // Primero la caché; solo si no está (o ha caducado) se pide a la API
+    let obrasApi = leerCache(tema)
+    desdeCache = obrasApi !== null
+    if (!desdeCache) {
+      obrasApi = await buscarObras(tema)
+      guardarCache(tema, obrasApi) // solo se llega aquí si no hubo error: los errores no se guardan
+    }
+    obras = prepararObras(obrasApi)
   } catch (error) {
     if (numero !== ultimaBusqueda) return
     pintarError(seccionEstado, error.message, () => buscar(tema))
@@ -57,6 +67,7 @@ async function buscar(texto) {
   }
 
   obrasActuales = obras
+  obrasDesdeCache = desdeCache
   filtroImagen.checked = false
   pintarOpcionesFiltro(filtroSiglo, filtroOrigen, opcionesDeFiltro(obrasActuales))
   seccionFiltros.hidden = false
@@ -81,7 +92,7 @@ function mostrar() {
     limpiar(seccionResultados)
   } else {
     limpiar(seccionEstado)
-    pintarObras(seccionResultados, visibles, obrasActuales.length)
+    pintarObras(seccionResultados, visibles, obrasActuales.length, obrasDesdeCache)
   }
   pintarEstadisticas(seccionEstadisticas, calcularEstadisticas(visibles))
 }

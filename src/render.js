@@ -75,10 +75,10 @@ function crearTarjeta(obra) {
   return tarjeta
 }
 
-export function pintarObras(contenedor, obras, totalSinFiltrar) {
+export function pintarObras(contenedor, obras, totalSinFiltrar, desdeCache = false) {
   const resumen = crear('p', {
     clase: 'resumen',
-    texto: `Mostrando ${obras.length} de ${totalSinFiltrar} obras`,
+    texto: `Mostrando ${obras.length} de ${totalSinFiltrar} obras${desdeCache ? ' · desde la caché' : ''}`,
   })
   const rejilla = crear('div', { clase: 'rejilla' })
   rejilla.append(...obras.map(crearTarjeta))
