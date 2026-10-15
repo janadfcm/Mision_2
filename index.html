@@ -4,16 +4,42 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mision 2</title>
+    <title>Museo de bolsillo</title>
   </head>
   <body>
-    <header></header>
+    <header>
+      <h1>Museo de bolsillo</h1>
+      <p>Tu propia sala con obras del Art Institute of Chicago.</p>
+    </header>
+
     <main>
-      <form id="buscador"></form>
-      <section id="estado"></section>
+      <form id="buscador">
+        <label for="busqueda">¿Qué tema quieres ver?</label>
+        <input id="busqueda" name="busqueda" type="search" placeholder="cat, sea, night…" />
+        <button type="submit">Buscar</button>
+        <p class="ayuda">Busca en inglés: los datos del museo están en inglés.</p>
+      </form>
+
+      <section id="filtros" hidden>
+        <label>
+          <input id="filtro-imagen" type="checkbox" />
+          Solo con imagen
+        </label>
+        <label>
+          Siglo
+          <select id="filtro-siglo"></select>
+        </label>
+        <label>
+          Origen
+          <select id="filtro-origen"></select>
+        </label>
+      </section>
+
+      <section id="estado" aria-live="polite"></section>
       <section id="estadisticas"></section>
       <section id="resultados"></section>
     </main>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
