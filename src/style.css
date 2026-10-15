@@ -1,1 +1,366 @@
-/* Estilos de la M2 */
+/* Museo de bolsillo: sala de museo con paredes claras, obras enmarcadas y cartelas */
+
+/* ---------- Variables de color y tipografía ---------- */
+:root {
+  --pared: #f4efe6;          /* fondo, color papel */
+  --marco: #ffffff;          /* paspartú de cada obra */
+  --tinta: #2b2622;          /* texto principal */
+  --tinta-suave: #6b6259;    /* texto secundario */
+  --acento: #9b2c2c;         /* granate de museo: botones y enlaces */
+  --acento-hover: #7a1f1f;
+  --borde: #d9cfc1;
+  --error: #9b2c2c;
+  --fondo-error: #f8e4e1;
+  --sombra: 0 2px 10px rgb(43 38 34 / 0.12);
+
+  --serifa: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: light dark;
+}
+
+/* Modo oscuro según la preferencia del sistema: sala de noche */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pared: #1d1a17;
+    --marco: #2a2622;
+    --tinta: #eee7dc;
+    --tinta-suave: #b3a99c;
+    --acento: #e08a7a;
+    --acento-hover: #f0a898;
+    --borde: #403a33;
+    --error: #f0a898;
+    --fondo-error: #3a2421;
+    --sombra: 0 2px 10px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Imprescindible: si no, el display de #filtros anularía el atributo hidden */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background: var(--pared);
+  color: var(--tinta);
+  font-family: var(--sans);
+  line-height: 1.5;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--serifa);
+  font-weight: normal;
+}
+
+a {
+  color: var(--acento);
+}
+
+a:hover {
+  color: var(--acento-hover);
+}
+
+/* Foco visible para quien navega con teclado */
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+}
+
+/* ---------- Cabecera ---------- */
+header {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+  border-bottom: 1px solid var(--borde);
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  letter-spacing: 0.04em;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  color: var(--tinta-suave);
+  font-style: italic;
+}
+
+/* ---------- Buscador ---------- */
+#buscador {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+#buscador label {
+  width: 100%;
+  text-align: center;
+  font-family: var(--serifa);
+  font-size: 1.2rem;
+}
+
+#buscador input {
+  flex: 1 1 16rem;
+  max-width: 28rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: var(--marco);
+  color: var(--tinta);
+  font: inherit;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background: var(--acento);
+  color: var(--marco);
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--acento-hover);
+}
+
+.ayuda {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+/* ---------- Filtros ---------- */
+#filtros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+  font-size: 0.95rem;
+}
+
+#filtros label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+#filtros select {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: var(--marco);
+  color: var(--tinta);
+  font: inherit;
+}
+
+/* ---------- Estados: cargando, error, vacío ---------- */
+#estado {
+  text-align: center;
+}
+
+.cargando,
+.vacio {
+  color: var(--tinta-suave);
+  font-style: italic;
+}
+
+/* Parpadeo suave mientras carga */
+.cargando {
+  animation: latido 1.4s ease-in-out infinite;
+}
+
+@keyframes latido {
+  50% { opacity: 0.4; }
+}
+
+.error {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--error);
+  background: var(--fondo-error);
+  color: var(--error);
+}
+
+#estado button {
+  display: block;
+  margin: 0 auto;
+}
+
+/* ---------- Estadísticas ---------- */
+#estadisticas:not(:empty) {
+  max-width: 40rem;
+  margin: 0 auto 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--marco);
+  box-shadow: var(--sombra);
+}
+
+#estadisticas h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.4rem;
+}
+
+#estadisticas h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.datos,
+.barras {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.datos li {
+  padding: 0.2rem 0;
+}
+
+.barras li {
+  display: grid;
+  grid-template-columns: 9rem 1fr 2rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.15rem 0;
+  font-size: 0.9rem;
+}
+
+.barras .etiqueta {
+  text-align: right;
+  color: var(--tinta-suave);
+}
+
+/* El ancho lo pone render.js en proporción al siglo con más obras */
+.barra {
+  height: 0.8rem;
+  min-width: 2px;
+  background: var(--acento);
+  border-radius: 2px;
+}
+
+/* ---------- Obras ---------- */
+.resumen {
+  color: var(--tinta-suave);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+/* Cada obra: paspartú blanco + cartela debajo */
+.obra {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: var(--marco);
+  box-shadow: var(--sombra);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.obra:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgb(43 38 34 / 0.18);
+}
+
+.obra img,
+.sin-imagen {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 0.75rem;
+}
+
+/* contain: la obra se ve entera, sin recortes */
+.obra img {
+  object-fit: contain;
+  background: var(--pared);
+}
+
+.sin-imagen {
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--borde);
+  color: var(--tinta-suave);
+  font-style: italic;
+}
+
+.obra h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.obra h3 a {
+  color: var(--tinta);
+  text-decoration: none;
+}
+
+.obra h3 a:hover {
+  color: var(--acento);
+  text-decoration: underline;
+}
+
+.artista,
+.detalle {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.artista {
+  font-weight: 600;
+}
+
+.detalle {
+  color: var(--tinta-suave);
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 480px) {
+  .barras li {
+    grid-template-columns: 6.5rem 1fr 1.5rem;
+  }
+}
+
+/* Respetar a quien pide menos animaciones en su sistema */
+@media (prefers-reduced-motion: reduce) {
+  .obra,
+  .cargando {
+    transition: none;
+    animation: none;
+  }
+
+  .obra:hover {
+    transform: none;
+  }
+}
