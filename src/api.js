@@ -12,6 +12,7 @@ const CAMPOS = [
   'date_display',
   'place_of_origin',
   'image_id',
+  'thumbnail', // trae `lqip`: miniatura diminuta dentro del propio JSON (no pasa por el servidor IIIF)
 ]
 
 const POR_PAGINA = 30 // la API rechaza límites altos (con 1000 da 403)
