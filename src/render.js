@@ -38,20 +38,30 @@ export function limpiar(...contenedores) {
 
 // ---------- Tarjetas de obras ----------
 
-// Hueco en lugar de la imagen: la obra no tiene, o no ha cargado
-function crearSinImagen() {
-  return crear('div', { clase: 'sin-imagen', texto: 'Sin imagen' })
+// Hueco en lugar de la imagen: la obra no tiene, o no ha cargado.
+// Si hay miniatura (lqip), se ve ampliada y difuminada detrás del aviso.
+function crearSinImagen(obra) {
+  if (obra.miniatura === null) {
+    return crear('div', { clase: 'sin-imagen', texto: 'Sin imagen' })
+  }
+
+  const hueco = crear('div', { clase: 'sin-imagen con-miniatura' })
+  const miniatura = crear('img', { clase: 'miniatura' })
+  miniatura.src = obra.miniatura
+  miniatura.alt = '' // decorativa: el aviso de texto ya lo explica
+  hueco.append(miniatura, crear('span', { texto: 'Imagen no disponible' }))
+  return hueco
 }
 
 function crearImagen(obra) {
-  if (obra.imageId === null) return crearSinImagen()
+  if (obra.imageId === null) return crearSinImagen(obra)
 
   const imagen = crear('img')
   imagen.src = urlImagen(obra.imageId)
   imagen.alt = `${obra.titulo}, de ${obra.artista}`
   imagen.loading = 'lazy' // solo se descarga al acercarse a la pantalla
   // Si el servidor de imágenes falla, cambiamos la imagen rota por el hueco
-  imagen.addEventListener('error', () => imagen.replaceWith(crearSinImagen()), { once: true })
+  imagen.addEventListener('error', () => imagen.replaceWith(crearSinImagen(obra)), { once: true })
   return imagen
 }
 
