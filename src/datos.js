@@ -14,6 +14,14 @@ function textoONulo(valor) {
   return typeof valor === 'string' && valor.trim() !== '' ? valor.trim() : null
 }
 
+// Solo aceptamos la miniatura si es una imagen en base64: va a un `src` y viene de fuera
+const MINIATURA_VALIDA = /^data:image\/(gif|png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/
+
+function miniaturaONula(thumbnail) {
+  const lqip = thumbnail?.lqip
+  return typeof lqip === 'string' && MINIATURA_VALIDA.test(lqip) ? lqip : null
+}
+
 // De la obra tal como llega de la API a la forma que usa la app
 export function normalizarObra(obra) {
   const anio = Number.isFinite(obra.date_start) ? obra.date_start : null
@@ -27,6 +35,7 @@ export function normalizarObra(obra) {
     siglo: calcularSiglo(anio),
     origen: textoONulo(obra.place_of_origin) ?? SIN_ORIGEN,
     imageId: textoONulo(obra.image_id),
+    miniatura: miniaturaONula(obra.thumbnail), // 8×5 px; de reserva si IIIF falla
   }
 }
 
