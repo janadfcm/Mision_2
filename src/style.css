@@ -315,6 +315,33 @@ button:hover {
   font-style: italic;
 }
 
+/* Miniatura de 8×5 px ampliada: el difuminado esconde los píxeles y deja los colores */
+.con-miniatura {
+  position: relative;
+  overflow: hidden;
+  border: none;
+}
+
+.obra .miniatura {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  margin: 0;
+  object-fit: cover;
+  filter: blur(14px);
+  transform: scale(1.25); /* sin esto, el blur deja los bordes transparentes */
+}
+
+.con-miniatura span {
+  position: relative; /* por encima de la miniatura */
+  padding: 0.25rem 0.6rem;
+  background: color-mix(in srgb, var(--marco) 80%, transparent); /* vale en claro y en oscuro */
+  color: var(--tinta);
+  font-size: 0.85rem;
+}
+
 .obra h3 {
   margin: 0 0 0.25rem;
   font-size: 1.05rem;
