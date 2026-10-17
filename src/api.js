@@ -35,7 +35,12 @@ export async function buscarObras(texto) {
     if (error.name === 'TimeoutError') {
       throw new Error('El museo tarda demasiado en responder. Inténtalo de nuevo.')
     }
-    throw new Error('No se ha podido conectar con el museo. Revisa tu conexión.')
+    if (!navigator.onLine) {
+      throw new Error('Sin conexión a internet. Revisa tu conexión.')
+    }
+    // Con red, también llega aquí si el cortafuegos del museo rechaza la búsqueda
+    // (p. ej., texto que parece HTML): responde 403 sin CORS y fetch lo ve como fallo de red
+    throw new Error('No se ha podido contactar con el museo. Revisa tu conexión o prueba con otra búsqueda.')
   }
 
   // Un 404 o un 500 NO hacen saltar el catch: hay que comprobarlo a mano
