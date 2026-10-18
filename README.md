@@ -38,8 +38,8 @@ Abre la dirección que aparece en la terminal (normalmente http://localhost:5173
 - **Qué partes**: la IA escribió el código **módulo a módulo** (`api.js`, `datos.js`, `render.js`, `main.js`, `style.css` y `cache.js`) y me explicó cada uno antes de pasar al siguiente. También redactó este README a partir de mis notas.
 - **Qué hice yo**: tomé las decisiones del proyecto (la API, el nombre, el umbral de relevancia, el aviso de buscar en inglés, la caducidad de la caché y el apaño de la miniatura difuminada), probé cada módulo en Chrome antes de seguir e hice yo todos los *commits*. No escribí código a mano.
 - ***Prompts* reales**:
-  - «[PEGA AQUÍ UN PROMPT REAL]»
-  - «[PEGA AQUÍ OTRO PROMPT REAL]»
+  - «a ver ahora pon el codigo en los archivos para que lo pruebe» (15 de octubre, al empezar el código; elegí ir módulo a módulo, empezando por `api.js`).
+  - «haz tú la prueba de robustez» (17 de octubre; de ahí salió que el cortafuegos de la API bloquea búsquedas con aspecto de ataque y la app lo confundía con un fallo de conexión, así que se retocó el mensaje de error).
 - **Cómo lo verifiqué**:
   - En Chrome: búsqueda normal, búsqueda sin resultados (`qq`), búsqueda vacía, filtros (también sin coincidencias), modo sin conexión con «Reintentar», caché («· desde la caché» al repetir) y modo claro/oscuro, mirando que la consola no diera errores.
   - La IA lo probó además con 13 casos de robustez en Chrome automatizado, simulando respuestas raras de la API (error 500, respuesta que no es JSON, JSON sin `data`, obra con todos los campos a `null`, título con HTML).
